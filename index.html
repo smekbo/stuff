@@ -1,0 +1,38 @@
+<!Doctype HTML>
+<html>
+<style>
+	
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+	var comic = [
+		"start.png",
+		"1.png",
+		"1-text.png",
+		"2.png",
+		"2-text1.png",
+		"2-text2.png",
+		"3.png",
+		"3-text.png",
+		"4.png",
+		"4-text.png",
+		"5.png",
+		"5-text1.png",
+		"5-text2.png"
+	]
+	var x = 1;
+	$(document).ready(function(){
+
+		$(".comic").on("click", function(){
+			$(".comic img").attr("src", comic[x]);
+			x=x+1;
+		})
+	})
+</script>
+<div class="comic">
+	<img src="start.png" />
+</div>
+<audio autoplay>
+	<source src="yuyu.mp3" type="audio/mp3">
+</audio>
+</html>
