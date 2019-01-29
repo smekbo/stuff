@@ -10,6 +10,11 @@
         line-height: 1.5;  
     }
   </style>
+  
+  <div id="t">
+    Test Title Please Ignore
+  </div>
+  
   <script>
     function getUrlVars() {
         var vars = {};
@@ -19,13 +24,10 @@
         return vars;
     }
     
-    var title = document.getElementById('title');
+    var title = document.getElementById("t");
     var text = atob(getUrlVars()["t"])
     title.innerHTML = text;
-  </script>
-  
-  <div id="title">
-  </div>
+  </script>  
   
 	<div style="display:none">
 		<iframe width="560" height="315" src="https://www.youtube.com/embed/idoYCVLh2qI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
