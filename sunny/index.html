@@ -42,7 +42,7 @@
     
     var title = document.getElementById("t");
     var text = atob(getUrlVars()["t"])
-    title.innerHTML = text;
+    title.innerHTML = "\"" + text + "\"";
     
     $(window).resize(function(){
       refresh();
