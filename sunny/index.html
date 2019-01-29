@@ -1,0 +1,33 @@
+<html>
+  <style>
+    html {
+      background-color: black;
+    }
+    .center {
+        font-family: 'textileregular';
+        color: white;
+        border: none;
+        line-height: 1.5;  
+    }
+  </style>
+  <script>
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+            vars[key] = value;
+        });
+        return vars;
+    }
+    
+    var title = document.getElementById('title');
+    title.innerHTML = atob(getUrlVars()["t"]);
+  </script>
+  
+  <div id="title">
+  </div>
+  
+	<div style="display:none">
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/idoYCVLh2qI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	</div>  
+  
+</html>
