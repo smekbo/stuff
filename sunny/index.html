@@ -20,7 +20,8 @@
     }
     
     var title = document.getElementById('title');
-    title.innerHTML = atob(getUrlVars()["t"]);
+    var text = atob(getUrlVars()["t"])
+    title.innerHTML = text;
   </script>
   
   <div id="title">
