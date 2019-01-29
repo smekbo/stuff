@@ -9,13 +9,25 @@
         border: none;
         line-height: 1.5;  
     }
+    @font-face {
+      font-family: 'textileregular';
+      src: url('Textile Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+    }    
   </style>
   
   <div id="t" class="center">
     Test Title Please Ignore
   </div>
   
+  
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>  
   <script>
+    function refresh(){
+      $('.center').css('margin-top',$(window).height()/2-$('.center').height()/2);
+    }    
     function getUrlVars() {
         var vars = {};
         var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -27,6 +39,11 @@
     var title = document.getElementById("t");
     var text = atob(getUrlVars()["t"])
     title.innerHTML = text;
+    
+    $(window).resize(function(){
+      refresh();
+    });    
+    refresh();
   </script>  
   
 	<div style="display:none">
