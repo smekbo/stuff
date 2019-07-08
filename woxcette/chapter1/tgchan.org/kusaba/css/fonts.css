@@ -1,0 +1,29 @@
+@font-face {
+	font-family: tempfontimpact;
+	src: url('afterimpact.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfontcourier;
+	src: url('bikecourier.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfontcosmic;
+	src: url('cosmic-sans.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfontsanssans;
+	src: url('Sans_Sans.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfonthalfvetica;
+	src: url('halfvetica.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfontroman;
+	src: url('timesoldroman.ttf') format('truetype');
+}
+@font-face {
+	font-family: tempfontcharacter;
+	src: url('UniCharacter.ttf') format('truetype');
+}
+
