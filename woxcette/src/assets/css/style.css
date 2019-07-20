@@ -1,0 +1,54 @@
+.header {
+  text-align: center;
+}
+.header h1{
+  font-family: 'Kalam', cursive;
+  font-weight: bold;
+  font-size: 5.5em;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.header h2 {
+  font-family: 'Kalam', cursive;
+  font-size: 2em;
+  color: #565656;
+  position: relative;
+  top: -10px;
+  margin: 0px;
+}
+.header span {
+  font-family: 'Kalam', cursive;
+  position: relative;
+  font-size: 1.8em;
+  bottom: -10px;
+  margin: 0px;
+}
+body {
+  background-image: url('../chuck5.png');
+}
+div.spoiler{
+  background-image: url('../spoilerbg.png');
+}
+.post {
+  text-align: left;
+}
+.container{
+  background-color: white;
+}
+
+img.col.s5.image,
+span.col.s5.body {
+    -webkit-transition-property: width height background-color font-size left top color;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-delay: 0.2s;
+    -webkit-transition-timing-function: linear;
+    transition-property: width height background-color font-size left top   
+}
+img.col.s7.image,
+span.col.s7.body {
+    -webkit-transition-property: width height background-color font-size left top color;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-delay: 0.2s;
+    -webkit-transition-timing-function: linear;
+    transition-property: width height background-color font-size left top   
+}

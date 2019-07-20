@@ -1,75 +1,134 @@
+import os
 import requests
 import urllib
 import time
 import re
+import json
+import hashlib
 from bs4 import BeautifulSoup
 
-# http://192.168.88.234/woxcette/chapter1/tgchan.org/kusaba/questarch/res/692327.html
 
-# For scraping a live site
-url = "https://tgchan.org/kusaba/questarch/res/692327.html"
-response = requests.get(url)
-soup = BeautifulSoup(response.text, "html.parser")
+CHAPTER = 0 # 0 = all
+DOWNLOAD_IMAGES = True
+JSON_DIR = "/home/bob/comics/woxcette/src/assets"
+IMG_DIR = "/home/bob/comics/woxcette/src/assets/img"
+URLS = [
+  "https://tgchan.org/kusaba/questarch/res/692327.html",
+  "https://tgchan.org/kusaba/questarch/res/696969.html",
+  "https://tgchan.org/kusaba/questarch/res/715522.html",
+  "https://tgchan.org/kusaba/questarch/res/727645.html",
+  "https://tgchan.org/kusaba/questarch/res/736166.html",
+  "https://tgchan.org/kusaba/questarch/res/743488.html",
+  "https://tgchan.org/kusaba/questarch/res/754011.html",
+  "https://tgchan.org/kusaba/questarch/res/759736.html",
+  "https://tgchan.org/kusaba/questarch/res/768999.html",
+  "https://tgchan.org/kusaba/questarch/res/784444.html",
+  "https://tgchan.org/kusaba/questarch/res/812307.html",
+  "https://tgchan.org/kusaba/quest/res/833755.html",
+  "https://tgchan.org/kusaba/quest/res/875642.html",
+  "https://tgchan.org/kusaba/quest/res/939120.html"
+]
 
-# Scrape a cached one for testing
-# with open("chapter1/tgchan.org/kusaba/questarch/res/692327.html") as fp:
-#   soup = BeautifulSoup(fp, "html.parser")
+def downloadImage(link, filename, chapter):
+  if DOWNLOAD_IMAGES:
+    r = requests.get(link)
+    imgDir = os.path.join(IMG_DIR, 'chapter' + str(chapter))
+    open(os.path.join(imgDir, filename), 'wb').write(r.content)
+    print('Image ' + os.path.join(imgDir, filename) + ' downloaded...')
+    time.sleep(1)
 
-class Post:
-  def __init__(self, poster, image, body):
-    self.poster = poster
-    self.image = image
-    self.body = body
+def scrape(url, chapter):
+  response = requests.get(url)
+  soup = BeautifulSoup(response.text, "html.parser")
+  posts = soup.findAll('table')
+  postList = list()
 
-siteRoot = '/comics/woxcette/chapter1/tgchan.org'
+  # Get first post
+  authorId = soup.find("span", class_="uid").text
+  poster = soup.find("span", class_="postername").text
+  pColor = hashlib.md5(poster).hexdigest()[0:6]
+  body = soup.find("blockquote")
+  body['style'] = "border-left:5px solid #" + pColor
+  image = soup.find("span", class_="filesize").find("a").get("href")
+  dlLink = "http://tgchan.org" + image
+  image = image[image.rfind('/')+1:len(image)]
 
-posts = soup.findAll('table')
-postList = list()
+  # Download the image and wait a bit
+  downloadImage(dlLink, image, chapter)
 
-for post in posts:
-  fPoster = ""
-  fImage = ""
-  fBody = ""
-  
-  poster = post.find("span", class_="postername")
-  if poster is not None:
-    pass
-    fPoster = poster.text
-  image = post.find("span", class_="filesize")
-  if image is not None:
-    image = image.find("a")
-    if image is not None:
-      image = image.get("onclick")
-      if image is not None:
-        #print(image)
-        regex = re.search(r",[^']*'([^']*)'", image)
-        if regex is not None:
-          fImage = regex.group(1)
-          fImage = siteRoot + fImage
-  body = post.find("blockquote")
-  if body is not None:
-    fBody = body
-    
-  newPost = Post(fPoster, fImage, fBody);
-  
+  newPost = {
+    "poster" : poster,
+    "isAuthor" : True,
+    "pColor" : pColor,
+    "image" : image,
+    "spoiler" : False,
+    "body" : body.encode("utf-8")
+  }
   postList.append(newPost)
-  
-with open('/home/bob/comics/woxcette/chapter1/tgchan.org/kusaba/questarch/res/index.html', 'w') as f:
-    f.write('<html>')
-    f.write('<link rel="stylesheet" type="text/css" href="/comics/woxcette/style.css" >')
-    f.write("""
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>""")    
-    for post in postList:
-      if post.image != "":
-        f.write("<div class='container'>")
-        f.write("<div class='row post'>")
-        f.write("<div class='col s12 poster'><b>" + post.poster + "</b></div>")
-        f.write("<img class='col s5 postimage' src=" + post.image + " >")
-        f.write("<div class='col s7 postbody'>" + post.body.encode('utf-8').decode('ascii', 'ignore') + "</div>")
-        f.write("</div></div>")
-    f.write("</html")
-      
+  for post in posts:
+    fPoster = ""
+    isAuthor = False
+    pColor = ""
+    fImage = ""
+    fBody = ""
+    spoiler = False
+
+    poster = post.find("span", class_="postername")
+    if poster is not None:
+      fPoster = poster.text
+      try:
+        pColor = hashlib.md5(fPoster).hexdigest()[0:6]
+      except:
+        pass
+    postId = post.find("span", class_="uid")
+    if postId is not None:
+      if postId.text == authorId:
+        isAuthor = True
+    image = post.find("span", class_="filesize")
+    if image is not None:
+      image = image.find("a")
+      if image is not None:
+        image = image.get("href")
+        dlLink = "http://tgchan.org" + image
+        image = image[image.rfind('/')+1:len(image)]
+
+        # Download the image and wait a bit
+        downloadImage(dlLink, image, chapter)
+
+    if post.find("img") is not None:
+      if "spoiler" in post.find("img").get("src"):
+        spoiler = True
+    body = post.find("blockquote")
+    if body is not None:
+      spoilerTag = body.find("span", class_="spoiler")
+      if spoilerTag is not None:
+        del(spoilerTag['onmouseover'])
+        del(spoilerTag['onmouseout'])
+        del(spoilerTag['style'])
+      body['style'] = "border-left:5px solid #" + pColor
+      fBody = body
+
+    #newPost = Post(fPoster, fImage, fBody);
+    newPost = {
+      "poster" : fPoster,
+      "isAuthor" : isAuthor,
+      "pColor" : pColor,
+      "image" : image,
+      "spoiler" : spoiler,
+      "body" : fBody.encode("utf-8")
+    }
+
+    postList.append(newPost)
+
+  fileName = "chapter" + str(chapter) + ".json"
+  with open(os.path.join(JSON_DIR, fileName), 'w') as f:
+    f.write(json.dumps(postList))
+    print("Wrote " + os.path.join(JSON_DIR, fileName))
+    
+# if CHAPTER == 0:
+#   for i, link in enumerate(URLS):
+#     scrape(link, i + 1)
+# else:
+#   scrape(URLS[CHAPTER - 1], CHAPTER)
+downloadImage("https://tgchan.org/kusaba/questarch/src/146869176348.gif", "146869176348.gif", 5)
