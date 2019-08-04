@@ -1,0 +1,33 @@
+<html>
+<body>
+  <style>
+    html {
+      background-image: url('flyer.gif');
+    }
+  </style>
+
+  <div>
+    <iframe src="09 the moon.mp3" allow="autoplay" style="display:none" id="iframeAudio">
+    </iframe>
+    <audio loop autoplay id="playAudio">
+      <source src="09 the moon.mp3">
+      Error: your web browser does not support this audio player.
+    </audio>
+  </div>
+
+  <script
+    src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous"></script>
+  </script>
+  <script>
+    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if(!isChrome){
+        $('#iframeAudio').remove()
+      }
+    else{
+       $('#playAudio').remove() //just to make sure that it will not have 2x audio in the background
+    }
+  </script>
+</body>
+</html>
