@@ -8,7 +8,7 @@ import hashlib
 from bs4 import BeautifulSoup
 
 
-CHAPTER = 0 # 0 = all
+CHAPTER = 14 # 0 = all
 DOWNLOAD_IMAGES = True
 JSON_DIR = "/home/bob/comics/woxcette/src/assets"
 IMG_DIR = "/home/bob/comics/woxcette/src/assets/img"
@@ -126,9 +126,8 @@ def scrape(url, chapter):
     f.write(json.dumps(postList))
     print("Wrote " + os.path.join(JSON_DIR, fileName))
     
-# if CHAPTER == 0:
-#   for i, link in enumerate(URLS):
-#     scrape(link, i + 1)
-# else:
-#   scrape(URLS[CHAPTER - 1], CHAPTER)
-downloadImage("https://tgchan.org/kusaba/questarch/src/146869176348.gif", "146869176348.gif", 5)
+if CHAPTER == 0:
+  for i, link in enumerate(URLS):
+    scrape(link, i + 1)
+else:
+  scrape(URLS[CHAPTER - 1], CHAPTER)
